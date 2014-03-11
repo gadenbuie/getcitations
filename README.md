@@ -37,6 +37,7 @@ To setup this script, I recommend the following:
 - Add an alias for `getcitations.sh` to your `~/.bash_profile`.
 - Add a symlink called `library.bib` pointing to your central BibTeX file by running `ln -s /path/to/central/library.bib` from `~/.pandoc`.
 
+Requires [stringr](https://github.com/hadley/stringr), Hadley Wickham's string processing package for R.
 
 ## Behind the scenes
 
@@ -49,10 +50,6 @@ and end with a space, `]`, `;`, `,` or at the end of a line.
 BibTeX entries start on lines like `@<type>{CitationKey,`
 and end with a line with a single closing bracket `}`.
 
-
----
-
-By Garrick Aden-Buie: <http://garrickadenbuie.com>
 
 [pandoc]: http://johnmacfarlane.net/pandoc/ 
 [knitr]: http://yihui.name/knitr/
