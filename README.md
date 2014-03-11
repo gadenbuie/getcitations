@@ -22,7 +22,7 @@ $ Rscript getcitations.R <in doc file> <out bib file>
 or use `getcitations.sh`: 
 
 ```
-$ ./getcitations <name>.md
+$ ./getcitations.sh <name>.md
 # returns <name>.bib
 ```
 
