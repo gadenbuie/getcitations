@@ -48,9 +48,11 @@ cat(paste('Finding citations in:',args[1]))
 citations <- c()
 for(line in readLines(indoc, warn=F)){
   if(str_detect(line, '@')) {
-    cites <- str_match_all(line, "([[[:space:]]|^)@([[:alnum:]\\.-]+)([]\\;\\,\\s]|$)")[[1]][,3]
-    for(cite in cites){
-      citations <- c(citations, cite)
+    candidate <- str_match_all(line, "([[[:space:]]|^)@([[:alnum:]\\.-]+)([]\\;\\,\\s]|$)")[[1]]
+    if(length(candidate) != 0){
+      for(cite in candidate[,3]){
+        citations <- c(citations, cite)
+      }
     }
   }
 }
