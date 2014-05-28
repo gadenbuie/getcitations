@@ -30,34 +30,41 @@ MasterBibtexFile <- "~/.pandoc/library.bib"
 keep <- c('author', 'title', 'journal', 'year', 'volume', 'number',
           'pages', 'month', 'editor', 'publisher', 'series', 'edition',
           'adress', 'booktitle', 'organization', 'chapter',
-          'school', 'doi', 'url', 'howpublished')
+          'school', 'doi', 'url', 'howpublished', 'institution')
 
 
 #             ---- Set Up ----
 
 require(stringr, quietly=TRUE)
 args <- commandArgs(trailingOnly = TRUE)
-indoc <- file(args[1], open='r')
+infile <- args[1]
 outfile <- args[2]
 unlink(outfile)
 
 
 #    ---- Find citation keys in markdown ----
 
-cat(paste('Finding citations in:',args[1]))
-citations <- c()
-for(line in readLines(indoc, warn=F)){
-  if(str_detect(line, '@')) {
-    candidate <- str_match_all(line, "([[[:space:]]|^)@([[:alnum:]\\.-]+)([]\\;\\,\\s]|$)")[[1]]
-    if(length(candidate) != 0){
-      for(cite in candidate[,3]){
-        citations <- c(citations, cite)
+stripCitekeys <- function(infile){
+  indoc <- file(infile, open='r')
+  cat(paste('Finding citations in:',infile))
+  citations <- c()
+  for(line in readLines(indoc, warn=F)){
+    if(str_detect(line, '@')) {
+      candidate <- str_match_all(line, "([[[:space:]]|^)@([[:alnum:]:&!~=_+-]+)([]\\)\\;\\,\\s[:space:]\\.]|$)")[[1]]
+      if(length(candidate) != 0){
+        for(cite in candidate[,3]){
+          citations <- c(citations, cite)
+        } 
+      } else {
+        cat('\nTrouble line: ', line)
       }
     }
   }
+  close(indoc)
+  return(unique(citations))
 }
-close(indoc)
-citations <- unique(citations)
+
+citations <- stripCitekeys(infile)
 
 
 #    ---- Find and write BibTeX entries ----
