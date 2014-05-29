@@ -56,7 +56,8 @@ stripCitekeys <- function(infile){
           citations <- c(citations, cite)
         } 
       } else {
-        cat('\nTrouble line: ', line)
+        candidates <- str_match_all(line, "[[:space:]|^][[:alnum:][:punct:]]+@[[:alnum:][:punct:]]+")[[1]]
+        cat('\nTrouble match: ', candidates)
       }
     }
   }
@@ -69,7 +70,7 @@ citations <- stripCitekeys(infile)
 
 #    ---- Find and write BibTeX entries ----
 
-cat(paste('\nWriting BibTeX entries to:',args[2],'\n'))
+cat(paste('\n\nWriting BibTeX entries to:',args[2],'\n'))
 pb <- txtProgressBar(min=0, max=length(citations), initial=0, style=3)
 
 keyfound <- FALSE
