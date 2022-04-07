@@ -39,6 +39,9 @@ require(stringr, quietly=TRUE)
 args <- commandArgs(trailingOnly = TRUE)
 infile <- args[1]
 outfile <- args[2]
+if (!is.null(args[3])) {
+  MasterBibtexFile <- args[3]
+}
 unlink(outfile)
 
 
