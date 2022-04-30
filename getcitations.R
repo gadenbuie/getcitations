@@ -39,6 +39,9 @@ require(stringr, quietly=TRUE)
 args <- commandArgs(trailingOnly = TRUE)
 infile <- args[1]
 outfile <- args[2]
+if (!is.null(args[3])) {
+  MasterBibtexFile <- args[3]
+}
 unlink(outfile)
 
 
@@ -50,7 +53,7 @@ stripCitekeys <- function(infile){
   citations <- c()
   for(line in readLines(indoc, warn=F)){
     if(str_detect(line, '@')) {
-      candidate <- str_match_all(line, "([[[:space:]]|^)@([[:alnum:]:&!~=_+-]+)([]\\)\\;\\,\\s[:space:]\\.]|$)")[[1]]
+      candidate <- str_match_all(line, "(\\[|[[:space:]]|^)@([[:alnum:]:&!~=_+-]+)([]\\)\\;\\,\\s[:space:]\\.]|$)")[[1]]
       if(length(candidate) != 0){
         for(cite in candidate[,3]){
           citations <- c(citations, cite)
@@ -79,7 +82,7 @@ biblib <- file(MasterBibtexFile, open='r')
 for(line in readLines(biblib, warn=F)){
   if(keyfound){
     # Key is found, so print any entries we want to keep.
-    if(str_match(line, "(\\w+)[[:blank:]][=]")[1,2] %in% keep){
+    if(str_match(line, "(\\w+)[[:blank:]]+[=]")[1,2] %in% keep){
       cat(paste0('    ',line), file=outfile, append=TRUE, sep='\n')
     }
     if(line == '}'){
